@@ -1,0 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[ExecuteInEditMode]
+
+
+public class Billboard : MonoBehaviour
+{
+    public Transform m_Camera;
+    public Vector3 lastPosition;
+    public Vector3 currentPosition;
+    public Vector3 offset;
+    public Character c;
+    Animator motion;
+    Move move;
+    public bool dustOn;
+
+    private void Awake()
+    {
+        try
+        {
+            move = GetComponentInParent<Move>();
+            motion = GetComponent<Animator>();
+        }
+        catch { motion = null; }
+        m_Camera = Camera.main.transform;
+        GetComponentInChildren<SpriteRenderer>().receiveShadows = true;
+        GetComponentInChildren<SpriteRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        try
+        {
+            c = transform.parent.GetComponentInParent<Character>();
+        }
+        catch
+        {
+
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (m_Camera == null) m_Camera = Camera.main.transform;
+        gameObject.transform.rotation = m_Camera.rotation;
+
+        if (!Application.isPlaying) return;
+
+        if (currentPosition.x > lastPosition.x)
+
+        {
+            var scale = transform.localScale;
+            scale.Set(1, 1, 1);
+            transform.localScale = scale;
+        }
+        else if (currentPosition.x < lastPosition.x)
+        {
+            var scale = transform.localScale;
+            scale.Set(-1, 1, 1);
+            transform.localScale = scale;
+            
+        }
+  
+        lastPosition = currentPosition;
+        transform.position += offset;
+    }
+}
