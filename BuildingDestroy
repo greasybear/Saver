@@ -1,0 +1,113 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Building : Character
+{
+
+    public bool hut;
+    public GameObject smoke;
+    public GameObject fire;
+    public int dmgSpawn;
+    public bool damage = false;
+    public int spawnRate = 5;
+
+    public override void TakeDamage(float amt)
+    {
+        if (health > 0f)
+        {
+            BulidingDamage(amt);
+        }
+    }
+
+    public void BulidingDamage(float damageAmount)
+    {
+        health -= damageAmount;
+        dmgSpawn += 1;
+        damage = true;
+
+        if(health <= 0)
+        {
+            destroyedB = true;
+        }
+    }
+    Vector3 startPos;
+    Vector3 targetPos;
+    Vector3 targetY;
+    Vector3 startY;
+    float startTime;
+    public float remains;
+
+    public override void Awake()
+    {
+        base.Awake();
+        startTime = Time.time;
+        startPos = gameObject.transform.localScale;
+        startY = gameObject.transform.position;
+        if (hut)
+        {
+            targetPos = new Vector3(gameObject.transform.localScale.x, gameObject.transform.localScale.y, (gameObject.transform.localScale.z - gameObject.transform.localScale.z + remains));
+        }
+        else if (!hut)
+        {
+            targetPos = new Vector3(gameObject.transform.localScale.x, (gameObject.transform.localScale.y - gameObject.transform.localScale.y + remains), gameObject.transform.localScale.z);
+        }
+        targetY = new Vector3(gameObject.transform.position.x, 0f, gameObject.transform.position.z);
+    }
+
+    public List<Transform> spawnPoints;
+
+    void FireSpawn()
+    {
+        Transform fireToSpawn = spawnPoints[Random.Range(0, spawnPoints.Count)];
+        Instantiate(fire, fireToSpawn.position, Quaternion.identity, gameObject.transform);
+        dmgSpawn = 0;
+        spawnPoints.Remove(fireToSpawn);
+        damage = false;
+    }
+
+    public float shakeSpeed;
+    public float shakeAmount;
+
+    void Shake()
+    {
+        gameObject.transform.position =
+            new Vector3(gameObject.transform.position.x + (Mathf.Sin(Time.time * shakeSpeed) * shakeAmount),
+            gameObject.transform.position.y, gameObject.transform.position.z);
+    }
+
+    public float timer;
+    public float destructSpeed = .75f;
+    public bool destroyedB;
+    void Update()
+    {
+        if (spawnPoints.Count !=0 &&  dmgSpawn == spawnRate)
+        {
+            FireSpawn();
+            dmgSpawn = 0;
+
+        }
+        if (destroyedB)
+        {
+            if (col.enabled)
+            {
+                charAudio.Randomize(deathSounds);
+                Invoke("AudioStop", 5f);
+                GameObject.Find("Navmesh").GetComponent<UnityEngine.AI.NavMeshSurface>().BuildNavMesh();
+                col.enabled = false;
+            }
+            timer += (Time.deltaTime * destructSpeed);
+            transform.localScale = Vector3.Lerp(startPos, targetPos, timer);
+            transform.position = Vector3.Lerp(startY, targetY, timer);
+            Shake();
+        }
+        if(timer>1f)
+        { destroyedB = false;  }
+
+    }
+
+    void AudioStop()
+    {
+        Destroy(charAudio);
+    }
+}
