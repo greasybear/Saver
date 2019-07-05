@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class LockThem : Power {
+
+    bool lockMove = false;
+    float lerpTimer;
+
+    public override void Update()
+    {
+        lerpTimer += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            lerpTimer = 0;
+            lockMove = true;
+        }
+
+        if (lockMove)
+        {
+            LockMovement(6, humanMask);
+        }
+
+        if (lerpTimer >= 1)
+        {
+            lockMove = false;
+        }
+    }
+}
