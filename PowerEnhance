@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnhanceAll : Power {
+
+    bool bigBool = false;
+    float lerpTimer;
+
+    public override void Update()
+    {
+        lerpTimer += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            lerpTimer = 0;
+            bigBool = true;
+        }
+
+        if (bigBool)
+        {
+            MakeThemAllBig(6, skellerMask, lerpTimer);
+        }
+
+        if (lerpTimer >= 1)
+        {
+            bigBool = false;
+        }
+    }
+}
