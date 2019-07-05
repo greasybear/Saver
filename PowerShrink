@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Shrink : Power {
+
+    bool smallBool = false;
+    float lerpTimer;
+
+    public override void Update()
+    {
+        lerpTimer += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            lerpTimer = 0;
+            smallBool = true;
+        }
+
+        if (smallBool)
+        {
+            MakeSmall(6, humanMask, lerpTimer);
+        }
+
+        if (lerpTimer >= 1)
+        {
+            smallBool = false;
+        }
+    }
+}
