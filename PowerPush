@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Push : Power {
+
+    bool pushBool = false;
+    float lerpTimer;
+
+    public override void Update()
+    {
+        lerpTimer += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            lerpTimer = 0;
+            pushBool = true;
+        }
+
+        if (pushBool)
+        {
+            PushBack(6, humanMask, lerpTimer);
+        }
+
+        if (lerpTimer >= 1)
+        {
+            pushBool = false;
+        }
+    }
+}
