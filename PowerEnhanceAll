@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnhanceSize : Power {
+
+    bool bigBool = false;
+    float lerpTimer;
+
+	public override void Update () {
+        lerpTimer += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            lerpTimer = 0;
+            RandomSelect(6, skellerMask);
+            bigBool = true;
+        }
+
+        if (bigBool)
+        {
+            MakeBig(lerpTimer, randomGuy.gameObject);
+        }
+
+        if (lerpTimer >= 1)
+        {
+            bigBool = false;
+        }
+    }
+}
