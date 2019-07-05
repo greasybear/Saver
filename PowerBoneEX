@@ -1,0 +1,15 @@
+public class BoneExplode : Power
+{
+    private void Awake()
+    {
+        boneSplode = GetComponent<Power>().boneSplode;       
+    }
+
+    public override void Update()
+    {       
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            BoneExplode(6, humanMask, 20);
+        }
+    }
+}
