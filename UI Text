@@ -1,0 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SkellerCounter : MonoBehaviour {
+
+    public Text countText;
+    
+    SkellerCommand skellerCommand;
+
+    void Start()
+    {
+        skellerCommand = GameObject.FindGameObjectWithTag("Player").GetComponent<SkellerCommand>();
+    }
+    void Update()
+    {
+        //countText.transform.position = Input.mousePosition;
+       
+        //if(skellerCommand.selectedSkellers.Count > 0)
+        //    countText.text = skellerCommand.selectedSkellers.Count.ToString();
+        //else
+        //{
+            //countText.text = "0";
+        //}
+    }
+
+}
