@@ -1,0 +1,71 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Speech : MonoBehaviour {
+    string textShownOnScreen;
+    public string fullText = "The text you want shown on screen with typewriter effect.";
+    public float wordsPerSecond = 2; // speed of typewriter
+    private float timeElapsed = 0;
+    public Text speech;
+    public Transform mainCam;
+    public Transform charLocation;
+    public float offSet;
+    public bool bubble;
+
+    private void Awake()
+    {
+        // gameObject.SetActive(false);
+        if (bubble)
+        {
+            mainCam = Camera.main.transform;
+        }
+    }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    gameObject.SetActive(true);
+    //}
+
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    gameObject.SetActive(false);
+    //}
+
+    void Update()
+    {
+        if (bubble)
+        {
+            if (mainCam == null) mainCam = Camera.main.transform;
+
+            gameObject.transform.rotation = mainCam.rotation;
+
+
+            gameObject.transform.position = new Vector3(charLocation.position.x, charLocation.position.y + offSet, charLocation.position.z);
+        }
+        timeElapsed += Time.deltaTime;
+
+        textShownOnScreen = GetWords(fullText, timeElapsed * wordsPerSecond);
+        speech.text = textShownOnScreen;        
+
+    }
+
+    private string GetWords(string text, float wordCount)
+    {
+        float words = wordCount;
+        // loop through each character in text
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (text[i] == ' ')
+            {
+                words--;
+            }
+            if (words <= 0)
+            {
+                return text.Substring(0, i);               
+            }
+        }
+        return text;
+    }
+ }
